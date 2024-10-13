@@ -1,468 +1,216 @@
-import React, { useState } from 'react';
+// eslint-disable-next-line no-unused-vars
+import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import HimalayanCafe from '../assets/himalayan_cafe.jpg'; 
-import  KailashRestaurant from '../assets/kailash_restaurant.jpg'; 
-import  MountFoodies from '../assets/mount_foodies.jpg'; 
-import NatureFeast from '../assets/neature_feast.jpg'; 
-import SunflowerRestaurant from '../assets/sunflower1.webp'; 
-import OceanBreeze from '../assets/ocean_breeze.webp'; 
-import BeachsideDiner from '../assets/beachside_diner.webp'; 
-import TropicalTaste from '../assets/tropical_Taste.jpeg'; 
-import ContemporaryCafe from '../assets/contemporary.jpg'; 
-import HistoryBistro from '../assets/history.webp'; 
-import Artisan from '../assets/artisan.webp'; 
-import CulturalCuisine from '../assets/cultural_cuisine.jpg'; 
-import UrbanBites from '../assets/urban bites.png'; 
-import SquareEats from '../assets/square_eats.jpg'; 
-import CityFlavors from '../assets/city_flavours.webp'; 
-import DowntownDining from '../assets/downtown.webp'; 
-import GodsCafe from '../assets/gods_cafe.jpeg'; 
-import TempleCafe from '../assets/temple_view.jpg'; 
-import CulturalDining from '../assets/cultural.jpg'; 
-import HeritageInn from '../assets/heritage_inn.jpeg'; 
-
-// Container for the entire page
+import rest from '../assets/history.webp'; 
+import sside from '../assets/seaside.jpg'; // Placeholder image for attractions
 const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
-    background-color: #f4f4f9;
+    background: linear-gradient(135deg, #e4f5f1, #d9e6f2); /* Soft gradient */
     min-height: 100vh;
-    box-sizing: border-box;
+    padding: 40px 20px;
 `;
 
-// Container for the image section
-const ImageContainer = styled.div`
-    width: 100%;
-    max-width: 1200px;
-    margin-bottom: 30px;
-`;
-
-// Image styling with reduced height, object-fit for responsive design, and a light border
-const AttractionImage = styled.img`
-    width: 100%;
-    height: auto;
-    max-height: 400px;  
-    object-fit: cover;
-    border: 2px solid rgba(0, 0, 0, 0.3);  // Lighter black border
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-`;
-
-// Attribute container for holding the description and details
-const AttributeContainer = styled.div`
-    width: 100%;
-    max-width: 1200px;
-    font-size: 18px;
+const Header = styled.h1`
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 40px;
     color: #333;
-    line-height: 1.8;
-    text-align: justify;
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-
-    &:hover {
-        background: linear-gradient(135deg, #f0f0f0, #f9f9f9); 
-    }
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 2px;
+    border-bottom: 2px solid #8dd3bb;
+    padding-bottom: 10px;
+    width: fit-content;
 `;
 
-// Styling for each attribute item with added icons, hover effects, and transitions
-const AttributeItem = styled.div`
-    margin-bottom: 20px;
-    padding: 15px 10px;
-    font-size: 20px;
-    color: #444;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #ddd;
-    transition: all 0.3s ease;
-
-    &:hover {
-        background-color: #eef2f7;
-        transform: translateX(10px); 
-    }
-`;
-
-// Adding an icon placeholder before each attribute
-const AttributeIcon = styled.span`
-    font-size: 25px;
-    margin-right: 15px;
-    color: #007BFF;
-`;
-
-// Bold text styling for the attribute titles
-const BoldText = styled.span`
-    font-weight: bold;
-    color: #112211;
-    font-size: 22px;
-    letter-spacing: 1.2px;  
-    font-family: 'Arial', sans-serif;  
-`;
-
-// Attribute content styling
-const AttributeContent = styled.span`
-    color: #666;
-    font-size: 18px;
-    margin-left: 10px;
-    font-family: 'Georgia', serif;  
-`;
-
-// Star rating styling
-const StarRating = styled.div`
-    font-size: 30px;
-    color: #ffd700;
-    margin-top: 5px;
-`;
-
-// Review section styling with less spacing
-const Reviews = styled.div`
-    width: 100%;
-    max-width: 1200px;
-    margin-top: 10px;
+const AttractionContainer = styled.div`
     display: flex;
     flex-direction: column;
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-    text-align: left;
-
-    p {
-        margin-bottom: 5px;
-    }
-`;
-
-// Go Button styling centered at the bottom
-const GoButton = styled.button`
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    padding: 15px 40px;
-    font-size: 20px;
-    cursor: pointer;
-    border-radius: 8px;
-    margin-top: 40px;
-    transition: background-color 0.3s ease;
-    
-    &:hover {
-        background-color: #0056b3;
-    }
-
-    align-self: center;
-`;
-
-// Restaurant Container
-const RestaurantContainer = styled.div`
-    width: 100%;
-    max-width: 1200px;
-    margin-top: 40px;
-    display: flex;
-    justify-content: space-between;
-`;
-
-// Restaurant Box Styling
-const RestaurantBox = styled.div`
-    flex: 1;
-    margin: 0 10px;
-    text-align: center;
+    width: 80%;
+    padding: 30px;
+    margin: 20px 0;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Deeper shadow for better effect */
     transition: transform 0.3s ease;
 
     &:hover {
-        transform: scale(1.05);  // Enlarge effect on hover
+        transform: translateY(-10px);
     }
 `;
 
-// Restaurant Image Styling
-const RestaurantImage = styled.img`
+const AttractionImage = styled.img`
     width: 100%;
-    height: 20rem;
-    border-radius: 10px;
-    border: 2px solid rgba(0, 0, 0, 0.3);  // Lighter black border
+    height: 300px;
+    border-radius: 15px;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Added margin between the image and details */
 `;
 
-// Restaurant Name and Details Styling
-const RestaurantDetails = styled.div`
-    font-size: 16px;
-    color: #333;
-    margin-top: 10px;
+const AttractionDetails = styled.div`
     display: flex;
-    flex-direction: column; 
-    text-align: left;
-    align-items: flex-start;
+    flex-direction: column;
+    margin-top: 20px;
 `;
 
+const AttractionDescription = styled.p`
+    font-size: 20px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
+`;
+
+const WeatherInfo = styled.div`
+    font-size: 18px;
+    font-weight: 500;
+    color: #006d5b;
+    padding: 10px;
+    background: #f0f8f7;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+`;
+
+const CoordinatesInfo = styled(WeatherInfo)`
+    color: #333;
+    background: #f9f9f9;
+`;
+
+const RestaurantList = styled.div`
+    display: flex; /* Use flexbox for layout */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    justify-content: flex-start; /* Align items to the left */
+    width: 100%;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #8dd3bb;
+`;
+
+const RestaurantItem = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the left */
+    margin: 10px; /* Reduced margin for spacing */
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    width: calc(21% - 17px); /* Set width to approximately 23% to fit four cards in a row */
+
+    &:hover {
+        transform: translateY(-10px);
+    }
+
+    strong {
+        font-size: 18px;
+        color: #333;
+        text-align: left; /* Left-align text */
+    }
+
+    p {
+        margin: 5px 0;
+        font-size: 14px;
+        color: #555;
+        text-align: left; /* Left-align text */
+    }
+
+    img {
+        width: 92%; /* Adjust the size of the image */
+        // max-height: ;
+        border-radius: 10px; /* Rounded corners */
+        margin: 10px;
+        object-fit: cover;
+        margin-bottom: 10px; /* Space between image and text */
+    }
+`;
+
+const NearbyRestaurantsHeader = styled.h3`
+    width: 100%; /* Full width for proper alignment */
+    margin: 0; /* Remove default margin */
+    font-size: 24px; /* Font size for the heading */
+    font-weight: bold; /* Make it bold */
+    color: #333; /* Text color */
+    border-bottom: 2px solid #8dd3bb; /* Bottom border */
+    padding-bottom: 10px; /* Padding below the heading */
+    text-align: left; /* Align text to the left */
+`;
+
+const GoButton = styled.button`
+    margin-top: 40px;
+    padding: 15px 30px;
+    background-color: #8dd3bb;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+
+    &:hover {
+        background-color: #75b39f;
+        transform: translateY(-5px);
+    }
+`;
 
 const AttractionDescriptionPage = () => {
     const location = useLocation();
-    const attraction = location.state?.attraction;
     const navigate = useNavigate();
-    const [userReview, setUserReview] = useState(attraction ? attraction.reviews : 0);
+    const { attraction, restaurants } = location.state || {};
 
-    // Function to render stars based on reviews
-    const renderStars = () => {
-        const stars = [];
-        for (let i = 0; i < 5; i++) {
-            stars.push(i < userReview ? '★' : '☆');
-        }
-        return stars.join('');
-    };
+    if (!attraction) {
+        return <div>No attraction data found.</div>;
+    }
 
-    // Function to handle button click and navigate
     const handleGoClick = () => {
-        navigate('/another-page');
-    };
-
-    const renderRestaurants = () => {
-        console.log(attraction);
-        
-        if (attraction.name === "Mountain Vista") {
-            return (
-                <>
-                console.log("hi");
-                
-                    <RestaurantBox>
-                        <RestaurantImage src={HimalayanCafe} alt="Himalayan Cafe" />
-                        <RestaurantDetails>
-                            <strong>Himalayan Delight</strong><br />
-                            Distance: 1.2 km<br />
-                            Rating: 4.5/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                    <RestaurantBox>
-                        <RestaurantImage src={KailashRestaurant} alt="Kailash Restaurant" />
-                        <RestaurantDetails>
-                            <strong>Kailash Restaurant</strong><br />
-                            Distance: 0.8 km<br />
-                            Rating: 4.7/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                    <RestaurantBox>
-                        <RestaurantImage src={MountFoodies} alt="Mount Foodies" />
-                        <RestaurantDetails>
-                            <strong>Mount Foodies</strong><br />
-                            Distance: 1.0 km<br />
-                            Rating: 4.6/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                    <RestaurantBox>
-                        <RestaurantImage src={NatureFeast} alt="Nature's Feast" />
-                        <RestaurantDetails>
-                            <strong>Nature's Feast</strong><br />
-                            Distance: 1.5 km<br />
-                            Rating: 4.8/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                </>
-            );
-        } else if (attraction.name === "Beach Paradise") {
-            return (
-                <>
-                    <RestaurantBox>
-                        <RestaurantImage src={SunflowerRestaurant} alt="SunFlower Restaurant" />
-                        <RestaurantDetails>
-                            <strong>SunFlower Restaurant</strong><br />
-                            Distance: 0.5 km<br />
-                            Rating: 4.6/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                    <RestaurantBox>
-                        <RestaurantImage src={OceanBreeze} alt="Ocean Breeze" />
-                        <RestaurantDetails>
-                            <strong>Ocean Breeze</strong><br />
-                            Distance: 0.7 km<br />
-                            Rating: 4.4/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                    <RestaurantBox>
-                        <RestaurantImage src={BeachsideDiner} alt="Beachside Diner" />
-                        <RestaurantDetails>
-                            <strong>Beachside Diner</strong><br />
-                            Distance: 1.0 km<br />
-                            Rating: 4.5/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                    <RestaurantBox>
-                        <RestaurantImage src={TropicalTaste} alt="Tropical Taste" />
-                        <RestaurantDetails>
-                            <strong>Tropical Taste</strong><br />
-                            Distance: 1.2 km<br />
-                            Rating: 4.7/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                </>
-            );
-        } else if (attraction.name === "Historic Museum") {
-            return (
-                <>
-                    <RestaurantBox>
-                        <RestaurantImage src={ContemporaryCafe} alt="Contemporary Cafe" />
-                        <RestaurantDetails>
-                            <strong>Contemporary Cafe</strong><br />
-                            Distance: 0.6 km<br />
-                            Rating: 4.3/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                    <RestaurantBox>
-                        <RestaurantImage src={HistoryBistro} alt="History Bistro" />
-                        <RestaurantDetails>
-                            <strong>History Bistro</strong><br />
-                            Distance: 0.4 km<br />
-                            Rating: 4.5/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                    <RestaurantBox>
-                        <RestaurantImage src={Artisan} alt="Artisan's Table" />
-                        <RestaurantDetails>
-                            <strong>Artisan's Table</strong><br />
-                            Distance: 0.3 km<br />
-                            Rating: 4.6/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                    <RestaurantBox>
-                        <RestaurantImage src={CulturalCuisine} alt="Cultural Cuisine" />
-                        <RestaurantDetails>
-                            <strong>Cultural Cuisine</strong><br />
-                            Distance: 0.5 km<br />
-                            Rating: 4.4/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                </>
-            );
-        } else if (attraction.name === "City Square") {
-            return (
-                <>
-                    <RestaurantBox>
-                        <RestaurantImage src={CityFlavors} alt="City Flavors" />
-                        <RestaurantDetails>
-                            <strong>City Flavors</strong><br />
-                            Distance: 0.2 km<br />
-                            Rating: 4.5/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                    <RestaurantBox>
-                        <RestaurantImage src={UrbanBites} alt="Urban Bite" />
-                        <RestaurantDetails>
-                            <strong>Urban Bite</strong><br />
-                            Distance: 0.3 km<br />
-                            Rating: 4.6/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                    <RestaurantBox>
-                        <RestaurantImage src={SquareEats} alt="Square Eats" />
-                        <RestaurantDetails>
-                            <strong>Square Eats</strong><br />
-                            Distance: 0.4 km<br />
-                            Rating: 4.4/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                    <RestaurantBox>
-                        <RestaurantImage src={DowntownDining} alt="Downtown Dining" />
-                        <RestaurantDetails>
-                            <strong>Downtown Dining</strong><br />
-                            Distance: 0.5 km<br />
-                            Rating: 4.3/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                </>
-            );
-        } else if (attraction.name === "Cultural Temple") {
-            return (
-                <>
-                    <RestaurantBox>
-                        <RestaurantImage src={GodsCafe} alt="God's Own Cafe" />
-                        <RestaurantDetails>
-                            <strong>Sacred Flavors</strong><br />
-                            Distance: 0.4 km<br />
-                            Rating: 4.5/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                    <RestaurantBox>
-                        <RestaurantImage src={TempleCafe} alt="Temple View Cafe" />
-                        <RestaurantDetails>
-                            <strong>Temple View Cafe</strong><br />
-                            Distance: 0.6 km<br />
-                            Rating: 4.6/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                    <RestaurantBox>
-                        <RestaurantImage src={CulturalDining} alt="Cultural Dining" />
-                        <RestaurantDetails>
-                            <strong>Cultural Dining</strong><br />
-                            Distance: 0.5 km<br />
-                            Rating: 4.7/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                    <RestaurantBox>
-                        <RestaurantImage src={HeritageInn} alt="Heritage Inn" />
-                        <RestaurantDetails>
-                            <strong>Heritage Inn</strong><br />
-                            Distance: 0.7 km<br />
-                            Rating: 4.8/5
-                        </RestaurantDetails>
-                    </RestaurantBox>
-                </>
-            );
-        }
+        navigate('/another-page'); // Update this to the correct path
     };
 
     return (
         <Container>
-            <ImageContainer>
-                <AttractionImage src={attraction.image} alt={attraction.name} />
-            </ImageContainer>
-            <AttributeContainer>
-                <h2>{attraction.name}</h2>
-                
-                <AttributeItem>
-                    <AttributeIcon>📝</AttributeIcon>
-                    <BoldText>Description:</BoldText>
-                    <AttributeContent>{attraction.largeDescription}</AttributeContent>
-                </AttributeItem>
-                <AttributeItem>
-                    <AttributeIcon>📍</AttributeIcon>
-                    <BoldText>Ideal Weather:</BoldText>
-                    <AttributeContent>{attraction.weather}</AttributeContent>
-                </AttributeItem>
-                <AttributeItem>
-                    <AttributeIcon>📍</AttributeIcon>
-                    <BoldText>Best Time To Visit:</BoldText>
-                    <AttributeContent>{attraction.bestTime}</AttributeContent>
-                </AttributeItem>
-                <AttributeItem>
-                    <AttributeIcon>📍</AttributeIcon>
-                    <BoldText>Timings(Weekdays):</BoldText>
-                    <AttributeContent>{attraction.timings.weekdays}</AttributeContent>
-                </AttributeItem>
-                <AttributeItem>
-                    <AttributeIcon>📍</AttributeIcon>
-                    <BoldText>Timings(Weekends):</BoldText>
-                    <AttributeContent>{attraction.timings.weekends}</AttributeContent>
-                </AttributeItem>
-                <AttributeItem>
-                    <AttributeIcon>⭐</AttributeIcon>
-                    <BoldText>Rating:</BoldText>
-                    <AttributeContent>{renderStars()}</AttributeContent>
-                </AttributeItem>
-                <AttributeItem>
-                    <AttributeIcon>💬</AttributeIcon>
-                    <BoldText>Reviews:</BoldText>
-                    <AttributeContent>{attraction.reviewsCount} reviews</AttributeContent>
-                </AttributeItem>
-            </AttributeContainer>
-            {/* <Reviews>
-                <p>User Reviews:</p>
-                {attraction.reviews.map((review, index) => (
-                    <p key={index}>"{review}"</p>
+            <Header>{attraction.name}</Header>
+            <AttractionImage src={sside} alt={attraction.name} />
+            <AttractionContainer>
+                <AttractionDetails>
+                    <AttractionDescription>
+                        {attraction.description}
+                    </AttractionDescription>
+                    <WeatherInfo>
+                        Best Climate: {attraction.best_climate}<br />
+                        Ideal Weather: {attraction.ideal_weather} <br />
+                        Feels Like: {attraction.ideal_temp_min}°C
+                    </WeatherInfo>
+                    <CoordinatesInfo>
+                        Latitude: {attraction.latitude} <br />
+                        Longitude: {attraction.longitude}
+                    </CoordinatesInfo>
+                </AttractionDetails>
+            </AttractionContainer>
+
+            <RestaurantList>
+                <NearbyRestaurantsHeader>Nearby Restaurants:</NearbyRestaurantsHeader> {/* Updated header */}
+                {restaurants && restaurants.slice(0, 4).map((restaurant, index) => (
+                    <RestaurantItem key={index}>
+                        <img src={rest} alt={restaurant.name} />
+                        <div>
+                            <strong>{restaurant.name}</strong>
+                            <p>Address: {restaurant.address}</p>
+                            <p>Rating: {restaurant.rating}</p>
+                            <p>Distance: {restaurant.distance.toFixed(2)} km</p>
+                            
+                        </div>
+                    </RestaurantItem>
                 ))}
-            </Reviews> */}
+            </RestaurantList>
+
             <GoButton onClick={handleGoClick}>Go to Next Page</GoButton>
-            <RestaurantContainer>
-                {renderRestaurants()}
-            </RestaurantContainer>
         </Container>
     );
 };
